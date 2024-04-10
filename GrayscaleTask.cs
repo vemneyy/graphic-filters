@@ -2,18 +2,17 @@
 
 namespace Recognizer
 {
-    // Статический класс GrayscaleTask, который содержит метод для преобразования изображения в оттенки серого
     public static class GrayscaleTask
     {
-        // Коэффициенты для вычисления значения оттенка серого из цветовых каналов
-        private const double RedCoefficient = 0.299;
-        private const double GreenCoefficient = 0.587;
-        private const double BlueCoefficient = 0.114;
-        private const double NormalizationFactor = 255; // Фактор нормализации для перевода значения в диапазон [0, 1]
-
-        // Метод для преобразования цветного изображения в оттенки серого
+        // Метод для преобразования цветного изображения в оттенки серого, объединенный в одну функцию
         public static double[,] ToGrayscale(Pixel[,] originalPixels)
         {
+            // Коэффициенты для вычисления значения оттенка серого из цветовых каналов
+            const double RedCoefficient = 0.299;
+            const double GreenCoefficient = 0.587;
+            const double BlueCoefficient = 0.114;
+            const double NormalizationFactor = 255; // Фактор нормализации для перевода значения в диапазон [0, 1]
+
             // Получаем высоту и ширину исходного изображения
             int height = originalPixels.GetLength(0);
             int width = originalPixels.GetLength(1);
@@ -29,20 +28,16 @@ namespace Recognizer
                     // Получаем пиксель из исходного изображения
                     Pixel pixel = originalPixels[i, j];
 
-                    // Вычисляем значение оттенка серого для данного пикселя и сохраняем его в массив оттенков серого
-                    grayscaleImage[i, j] = ComputeGrayscaleValue(pixel);
+                    // Вычисляем значение оттенка серого для данного пикселя прямо здесь, используя коэффициенты
+                    double grayscaleValue = (pixel.R * RedCoefficient + pixel.G * GreenCoefficient + pixel.B * BlueCoefficient) / NormalizationFactor;
+
+                    // Сохраняем вычисленное значение оттенка серого в массив
+                    grayscaleImage[i, j] = grayscaleValue;
                 }
             }
 
             // Возвращаем массив оттенков серого
             return grayscaleImage;
-        }
-
-        // Метод для вычисления оттенка серого для конкретного пикселя
-        private static double ComputeGrayscaleValue(Pixel pixel)
-        {
-            // Вычисляем значение оттенка серого с использованием коэффициентов для каждого цветового канала
-            return (pixel.R * RedCoefficient + pixel.G * GreenCoefficient + pixel.B * BlueCoefficient) / NormalizationFactor;
         }
     }
 }
